@@ -41,7 +41,7 @@ public class Renamer {
 
         in.close();
 
-        if ("all".compareTo(listOfExtensions) == 0 || listOfExtensions.isEmpty()) {
+        if ("all".compareTo(listOfExtensions) == 0) {
             setFiles(getAllFiles(path));
         } else {
             addExtensions(listOfExtensions);
