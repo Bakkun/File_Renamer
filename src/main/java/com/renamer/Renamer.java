@@ -1,7 +1,5 @@
 package com.renamer;
 
-import com.renamer.exception.EmptyListException;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,7 +34,7 @@ public class Renamer {
         System.out.print("Enter the length of the file name: ");
         int nameLength = Integer.parseInt(in.nextLine());
 
-        System.out.print("Enter a list of extensions with which you want to rename the files: ");
+        System.out.print("Enter a list of extensions with which you want to rename the files (enter \"all\" to rename all files): ");
         String listOfExtensions = in.nextLine();
 
         in.close();
@@ -47,9 +45,13 @@ public class Renamer {
             addExtensions(listOfExtensions);
             setFiles(getAllFilesWithExtensions(path, extensions));
         }
-        renameAll(files, nameLength);
-
-        System.out.println("Files were renamed successfully!");
+        if (files.size() == 0) {
+            System.out.println("There are no files to rename.");
+        }
+        else {
+            renameAll(files, nameLength);
+            System.out.println("Files were renamed successfully!");
+        }
     }
 
     private static void addExtensions(String inputString) {
@@ -96,7 +98,7 @@ public class Renamer {
     }
 
     private static List<String> getAllFilesWithExtensions(String pathToDirectory, Set<String> setOfExtensions) {
-        List<String> result = new ArrayList<>();
+        List<String> result = null;
 
         try {
             result = Files.list(Paths.get(pathToDirectory))
@@ -106,14 +108,6 @@ public class Renamer {
                     .collect(Collectors.toList());
         } catch (IOException e) {
             e.printStackTrace();
-        }
-
-        if (result.isEmpty()) {
-            try {
-                throw new EmptyListException();
-            } catch (EmptyListException e) {
-                e.printStackTrace();
-            }
         }
 
         return result;
